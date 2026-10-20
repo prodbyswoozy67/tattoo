@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InkWell Tattoo · booking</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(145deg, #f6f4f0 0%, #e8e4dd 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+
+        .booking-card {
+            background: #ffffff;
+            max-width: 860px;
+            width: 100%;
+            border-radius: 2rem;
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.15), 0 8px 20px -8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.2s ease;
+        }
+
+        .booking-card:hover {
+            transform: scale(1.002);
+        }
+
+        .header {
+            background: #1e1e1e;
+            color: #e9d9c6;
+            padding: 1.8rem 2.2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .header i {
+            font-size: 2.2rem;
+            color: #c7a17a;
+        }
+
+        .header h1 {
+            font-weight: 500;
+            font-size: 1.9rem;
+            letter-spacing: -0.5px;
+            color: #f0e6da;
+        }
+
+        .header h1 span {
+            font-weight: 300;
+            color: #b8a28c;
+            font-size: 1.2rem;
+            margin-left: 0.6rem;
+        }
+
+        .content {
+            padding: 2.2rem 2.2rem 2.5rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.6rem 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-group label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #6b5e51;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .form-group label i {
+            color: #b2906e;
+            font-size: 0.9rem;
+        }
+
+        input, select {
+            background: #f9f8f6;
+            border: 1px solid #e0d9d0;
+            padding: 0.85rem 1rem;
+            border-radius: 1rem;
+            font-size: 0.95rem;
+            color: #1f1b17;
+            transition: all 0.2s;
+            outline: none;
+            font-weight: 400;
+            width: 100%;
+        }
+
+        input:focus, select:focus {
+            border-color: #c7a17a;
+            background: #ffffff;
+            box-shadow: 0 0 0 3px rgba(199, 161, 122, 0.15);
+        }
+
+        input[type="date"], input[type="time"] {
+            cursor: pointer;
+        }
+
+        .fee-preview {
+            background: #f4efe9;
+            border-radius: 1.2rem;
+            padding: 1.2rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 0.5rem;
+            border-left: 5px solid #c7a17a;
+        }
+
+        .fee-preview .label {
+            font-weight: 500;
+            color: #3d352d;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .fee-preview .amount {
+            font-weight: 700;
+            font-size: 1.9rem;
+            color: #1e1e1e;
+            letter-spacing: -0.5px;
+        }
+
+        .fee-preview .amount small {
+            font-weight: 400;
+            font-size: 0.9rem;
+            color: #8a7a6a;
+            margin-left: 4px;
+        }
+
+        .payment-section {
+            margin: 1.8rem 0 2rem;
+            background: #faf8f5;
+            padding: 1.4rem 1.5rem;
+            border-radius: 1.4rem;
+            border: 1px solid #ece5dc;
+        }
+
+        .payment-section h3 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #6b5e51;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .payment-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .payment-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #ffffff;
+            padding: 0.5rem 1.2rem 0.5rem 0.9rem;
+            border-radius: 3rem;
+            border: 1px solid #ddd5ca;
+            transition: all 0.15s;
+            cursor: pointer;
+            flex: 1 1 auto;
+            min-width: 110px;
+            justify-content: center;
+        }
+
+        .payment-option.selected {
+            border-color: #c7a17a;
+            background: #fdf8f2;
+            box-shadow: 0 0 0 2px rgba(199, 161, 122, 0.2);
+        }
+
+        .payment-option input[type="radio"] {
+            accent-color: #c7a17a;
+            width: 16px;
+            height: 16px;
+            margin-right: 2px;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .payment-option i {
+            color: #b2906e;
+            font-size: 1.1rem;
+            width: 1.2rem;
+            text-align: center;
+        }
+
+        .payment-option span {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #3d352d;
+            white-space: nowrap;
+        }
+
+        .book-btn {
+            background: #1e1e1e;
+            color: #f0e6da;
+            border: none;
+            padding: 1.1rem 2rem;
+            border-radius: 3rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            width: 100%;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 12px 20px -10px rgba(0, 0, 0, 0.3);
+        }
+
+        .book-btn i {
+            font-size: 1.2rem;
+            color: #c7a17a;
+        }
+
+        .book-btn:hover {
+            background: #2a2a2a;
+            transform: translateY(-2px);
+            box-shadow: 0 18px 25px -12px rgba(0, 0, 0, 0.4);
+        }
+
+        .book-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 8px 15px -8px rgba(0, 0, 0, 0.3);
+        }
+
+        .confirmation {
+            margin-top: 1.5rem;
+            padding: 1rem 1.5rem;
+            border-radius: 1.2rem;
+            background: #e8f0e8;
+            color: #1f4f1f;
+            font-size: 0.95rem;
+            display: none;
+            align-items: center;
+            gap: 12px;
+            border-left: 5px solid #3d7a3d;
+            word-break: break-word;
+        }
+
+        .confirmation.show {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .confirmation i {
+            font-size: 1.3rem;
+            color: #3d7a3d;
+            flex-shrink: 0;
+        }
+
+        /* ---------- RESPONSIVE ---------- */
+        @media (max-width: 700px) {
+            body {
+                padding: 0.8rem;
+            }
+
+            .booking-card {
+                border-radius: 1.5rem;
+            }
+
+            .header {
+                padding: 1.2rem 1.4rem;
+                gap: 0.7rem;
+            }
+
+            .header i {
+                font-size: 1.8rem;
+            }
+
+            .header h1 {
+                font-size: 1.4rem;
+                line-height: 1.2;
+            }
+
+            .header h1 span {
+                font-size: 0.9rem;
+                display: block;
+                margin-left: 0;
+                margin-top: 2px;
+            }
+
+            .content {
+                padding: 1.4rem 1.4rem 1.8rem;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+                gap: 1.2rem;
+            }
+
+            .fee-preview {
+                padding: 1rem 1.2rem;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.4rem;
+            }
+
+            .fee-preview .amount {
+                font-size: 1.6rem;
+            }
+
+            .payment-section {
+                padding: 1.1rem 1rem;
+                margin: 1.4rem 0 1.6rem;
+            }
+
+            .payment-options {
+                gap: 0.7rem;
+            }
+
+            .payment-option {
+                padding: 0.45rem 0.9rem;
+                min-width: 100px;
+                flex: 1 1 40%;
+            }
+
+            .payment-option span {
+                font-size: 0.8rem;
+            }
+
+            .payment-option i {
+                font-size: 1rem;
+            }
+
+            .book-btn {
+                padding: 1rem 1.5rem;
+                font-size: 1rem;
+            }
+
+            .confirmation {
+                padding: 0.9rem 1rem;
+                font-size: 0.9rem;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 6px;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .payment-option {
+                flex: 1 1 100%;
+            }
+
+            .header h1 {
+                font-size: 1.2rem;
+            }
+
+            .content {
+                padding: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="booking-card">
+        <div class="header">
+            <i class="fas fa-feather-alt"></i>
+            <h1>InkWell <span>tattoo studio</span></h1>
+        </div>
+        <div class="content">
+            <form id="bookingForm">
+                <div class="grid">
+                    <!-- Date picker -->
+                    <div class="form-group">
+                        <label for="date"><i class="far fa-calendar-alt"></i> Choose date</label>
+                        <input type="date" id="date" name="date" required>
+                    </div>
+                    <!-- Time picker -->
+                    <div class="form-group">
+                        <label for="time"><i class="far fa-clock"></i> Choose time</label>
+                        <input type="time" id="time" name="time" required>
+                    </div>
+                    <!-- Service / appointment type -->
+                    <div class="form-group">
+                        <label for="service"><i class="fas fa-pen-fancy"></i> Service</label>
+                        <select id="service" name="service" required>
+                            <option value="" disabled selected>Select a service</option>
+                            <option value="small" data-fee="80">Small tattoo (up to 2h) – $80</option>
+                            <option value="medium" data-fee="150">Medium tattoo (2–4h) – $150</option>
+                            <option value="large" data-fee="280">Large tattoo (4–6h) – $280</option>
+                            <option value="consult" data-fee="40">Consultation + design – $40</option>
+                            <option value="coverup" data-fee="200">Cover-up (per session) – $200</option>
+                            <option value="touchup" data-fee="60">Touch-up (existing tattoo) – $60</option>
+                            <option value="piercing" data-fee="45">Body piercing (with jewelry) – $45</option>
+                            <option value="removal" data-fee="120">Laser removal (session) – $120</option>
+                            <option value="flash" data-fee="100">Flash tattoo (pre-designed) – $100</option>
+                            <option value="custom" data-fee="180">Custom design (hourly) – $180</option>
+                        </select>
+                    </div>
+                    <!-- Payment method (radio) -->
+                    <div class="form-group">
+                        <label><i class="fas fa-credit-card"></i> Payment method</label>
+                        <div class="payment-options" id="paymentOptions">
+                            <label class="payment-option selected">
+                                <input type="radio" name="payment" value="card" checked>
+                                <i class="fas fa-credit-card"></i>
+                                <span>Card</span>
+                            </label>
+                            <label class="payment-option">
+                                <input type="radio" name="payment" value="cash">
+                                <i class="fas fa-money-bill-wave"></i>
+                                <span>Cash</span>
+                            </label>
+                            <label class="payment-option">
+                                <input type="radio" name="payment" value="transfer">
+                                <i class="fas fa-university"></i>
+                                <span>Transfer</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fee preview -->
+                <div class="fee-preview">
+                    <span class="label"><i class="fas fa-tag" style="color: #b2906e;"></i> Appointment fee</span>
+                    <span class="amount" id="feeDisplay">$0<small> USD</small></span>
+                </div>
+
+                <!-- Hidden field for fee value -->
+                <input type="hidden" id="feeValue" value="0">
+
+                <!-- Book button -->
+                <button type="submit" class="book-btn" id="bookBtn">
+                    <i class="fas fa-calendar-check"></i> Confirm booking
+                </button>
+            </form>
+
+            <!-- Confirmation message -->
+            <div class="confirmation" id="confirmationMessage">
+                <i class="fas fa-check-circle"></i>
+                <span id="confirmText">Your appointment is booked!</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            const form = document.getElementById('bookingForm');
+            const dateInput = document.getElementById('date');
+            const timeInput = document.getElementById('time');
+            const serviceSelect = document.getElementById('service');
+            const feeDisplay = document.getElementById('feeDisplay');
+            const feeValueInput = document.getElementById('feeValue');
+            const paymentOptions = document.querySelectorAll('.payment-option');
+            const confirmationDiv = document.getElementById('confirmationMessage');
+            const confirmTextSpan = document.getElementById('confirmText');
+
+            // Set minimum date to today
+            const today = new Date().toISOString().split('T')[0];
+            dateInput.min = today;
+
+            // --- Update fee based on service selection ---
+            function updateFee() {
+                const selectedOption = serviceSelect.options[serviceSelect.selectedIndex];
+                let fee = 0;
+                if (selectedOption && selectedOption.dataset.fee) {
+                    fee = parseFloat(selectedOption.dataset.fee);
+                }
+                const formatted = fee % 1 === 0 ? fee.toString() : fee.toFixed(2);
+                feeDisplay.innerHTML = `$${formatted}<small> USD</small>`;
+                feeValueInput.value = fee;
+            }
+
+            serviceSelect.addEventListener('change', function() {
+                updateFee();
+                confirmationDiv.classList.remove('show');
+            });
+
+            // --- Payment option visual selection ---
+            paymentOptions.forEach(option => {
+                const radio = option.querySelector('input[type="radio"]');
+                option.addEventListener('click', function(e) {
+                    if (e.target.tagName !== 'INPUT') {
+                        radio.checked = true;
+                    }
+                    paymentOptions.forEach(opt => opt.classList.remove('selected'));
+                    option.classList.add('selected');
+                    confirmationDiv.classList.remove('show');
+                });
+                radio.addEventListener('change', function() {
+                    paymentOptions.forEach(opt => opt.classList.remove('selected'));
+                    option.classList.add('selected');
+                    confirmationDiv.classList.remove('show');
+                });
+            });
+
+            // --- Form submission ---
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                if (!dateInput.value || !timeInput.value || !serviceSelect.value) {
+                    alert('Please fill in date, time and service.');
+                    return;
+                }
+
+                const selectedDate = new Date(dateInput.value + 'T00:00:00');
+                const todayDate = new Date();
+                todayDate.setHours(0, 0, 0, 0);
+                if (selectedDate < todayDate) {
+                    alert('Please choose a future date.');
+                    return;
+                }
+
+                const date = dateInput.value;
+                const time = timeInput.value;
+                const serviceText = serviceSelect.options[serviceSelect.selectedIndex].text;
+                const fee = feeValueInput.value;
+                const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
+                const paymentLabel = {
+                    card: 'Card',
+                    cash: 'Cash',
+                    transfer: 'Bank transfer'
+                }[paymentMethod] || paymentMethod;
+
+                const dateObj = new Date(date + 'T' + time);
+                const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                const formattedDate = dateObj.toLocaleDateString('en-US', options);
+                const formattedTime = dateObj.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+
+                // Clean service name (remove price part)
+                const cleanService = serviceText.split('–')[0].trim();
+
+                const message = `✅ ${cleanService} on ${formattedDate} at ${formattedTime}. Fee: $${fee} USD. Payment: ${paymentLabel}.`;
+                confirmTextSpan.textContent = message;
+                confirmationDiv.classList.add('show');
+
+                confirmationDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+                console.log('Booking confirmed:', {
+                    date,
+                    time,
+                    service: serviceText,
+                    fee,
+                    paymentMethod: paymentLabel
+                });
+            });
+
+            // Initialize fee display
+            feeDisplay.innerHTML = '$0<small> USD</small>';
+            feeValueInput.value = 0;
+
+            // Ensure payment visual consistency
+            document.querySelectorAll('.payment-option').forEach(opt => {
+                const radio = opt.querySelector('input[type="radio"]');
+                if (radio.checked) {
+                    opt.classList.add('selected');
+                } else {
+                    opt.classList.remove('selected');
+                }
+            });
+
+            // Hide confirmation when date/time changes
+            dateInput.addEventListener('change', () => confirmationDiv.classList.remove('show'));
+            timeInput.addEventListener('change', () => confirmationDiv.classList.remove('show'));
+
+            // Optional: set d
